@@ -17,8 +17,8 @@
 ### Manual:
 
 1. Make sure port 9000 and 80 are available
-
-2. docker-compose up -d --build
+2. Make path `@projectPath/var/log/nginx` writable
+3. docker-compose up -d --build
 
 - Create
 
