@@ -1,0 +1,20 @@
+wish_show:
+  path:       /wishes/{id}
+  controller: App\Controller\WishController::show
+  methods:    GET
+wish_create:
+  path:       /wishes
+  controller: App\Controller\WishController::create
+  methods:    POST
+wish_update:
+  path:       /wishes/{id}
+  controller: App\Controller\WishController::update
+  methods:    PUT
+wish_delete:
+  path:       /wishes/{id}
+  controller: App\Controller\WishController::delete
+  methods:    DELETE
+wish_move:
+  path:       /wishes/{id}/state/{slug}
+  controller: App\Controller\WishController::move
+  methods:    PUT
