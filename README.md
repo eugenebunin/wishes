@@ -1,11 +1,11 @@
-##Install
+## Install
 
 1. `cp .env.example .env`
 2. `composer install`
 3. `php bin/console doctrine:migrations:migrate`
 4. Make path `@projectPath/var/` writable
 
-##Test
+## Test
 
 ### Functional:
 `./vendor/bin/phpunit tests/Functional`
