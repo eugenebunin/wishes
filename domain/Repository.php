@@ -16,4 +16,6 @@ interface Repository
     public function create(Entity $entity): void;
 
     public function update(Entity $entity): void;
+
+    public function fetch(Query $query): array;
 }

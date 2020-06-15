@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\DoctrineQuery;
 use App\StateEnum;
 use App\WishId;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +11,8 @@ use Domain\Entity;
 use Domain\EntityFactory;
 use Domain\Exceptions\EntityNotFound;
 use Domain\Id;
+use Domain\Loader;
+use Domain\Query;
 use Domain\Repository as Contract;
 use App\Entity\Wish;
 use DateTime;
@@ -68,6 +71,16 @@ class WishRepository implements Contract
         $model->setState(StateEnum::key($entity->getState()->slug()));
         $this->em->persist($model);
         $this->em->flush();
+    }
+
+    public function fetch(Query $query): array
+    {
+        $collection = [];
+        $result = $this->em->createQueryBuilder()->select('w')->from($this->entityClass, 'w')->getQuery()->getResult();
+        foreach ($result as $wish) {
+            $collection[] = $this->fromPersistence($wish);
+        }
+        return $collection;
     }
 
     protected function fromPersistence(Wish $wish): Entity

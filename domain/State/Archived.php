@@ -14,7 +14,9 @@ class Archived extends State
     /**
      * @var array|string[]
      */
-    protected array $transitions = [];
+    protected array $transitions = [
+        Obtained::class,
+    ];
 
     function canUpdate(): bool
     {

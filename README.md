@@ -1,3 +1,10 @@
+Model Wish corresponds the logic:
+
+1. Entity could be: created, obtained or archived state.
+2. State transition is coherently.
+3. Entity not allowed for modification when is archived.
+4. Entity title could be min 2 and max 256 length. 
+
 ## Install
 
 1. `cp .env.example .env`
@@ -43,3 +50,7 @@
 - Delete
 
 `curl -X DELETE http://localhost/wishes/392c8b1b-cead-49c0-a17f-fa6db037ae07`
+
+- Index
+
+`curl -X GET http://localhost/wishes`

@@ -9,6 +9,7 @@ use Domain\Exceptions\TransitionNotAllowed;
 use Domain\EntityFactory;
 use Domain\Price;
 use Domain\State\Archived;
+use Domain\State\Created;
 use Domain\State\Obtained;
 use Domain\Title;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +27,7 @@ class EntityTest extends TestCase
         $factory = new EntityFactory();
         $item = $factory->withDefaultPrice($id, new Title('Empty'));
         $item->moveTo(new Obtained());
+        $item->moveTo(new Archived());
         $item->update(new Title('Fake'), Price::default());
     }
 
@@ -39,7 +41,7 @@ class EntityTest extends TestCase
         $factory = new EntityFactory();
         $item = $factory->withDefaultPrice($id, new Title('Empty'));
         $item->moveTo(new Archived());
-        $item->moveTo(new Obtained());
+        $item->moveTo(new Created());
     }
 
     /**

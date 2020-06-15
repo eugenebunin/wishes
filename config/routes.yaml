@@ -18,3 +18,7 @@ wish_move:
   path:       /wishes/{id}/state/{slug}
   controller: App\Controller\WishController::move
   methods:    PUT
+wish_index:
+  path:       /wishes
+  controller: App\Controller\WishController::index
+  methods:    GET

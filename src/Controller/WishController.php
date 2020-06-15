@@ -3,21 +3,23 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\CreateRequest;
-use App\MoveRequest;
-use App\StateEnum;
-use App\UpdateRequest;
+use App\Response\CollectionResponse;
+use App\Request\CreateRequest;
+use App\Response\EmptyResponse;
+use App\Request\MoveRequest;
+use App\QueryFactory;
+use App\Request\UpdateRequest;
+use App\WishDto;
 use App\WishId;
-use App\Response;
+use App\Response\WishResponse;
 use Domain\Exceptions\DomainException;
 use Domain\Exceptions\InvalidFormat;
 use Domain\Exceptions\TransitionNotAllowed;
 use Domain\Repository;
-use Domain\State\Factory;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use App\Request\IndexRequest;
 
 /**
  * Class WishController
@@ -35,12 +37,12 @@ class WishController extends AbstractController
     public function show(string $id)
     {
         $entity = $this->wishes->find(new WishId($id));
-        return new Response($entity);
+        return new WishResponse(new WishDto($entity));
     }
 
     /**
      * @param Request $request
-     * @return Response
+     * @return WishResponse
      * @throws InvalidFormat
      */
     public function create(Request $request)
@@ -48,32 +50,32 @@ class WishController extends AbstractController
         $createRequest = new CreateRequest($request);
         $entity = $createRequest->entity();
         $this->wishes->create($entity);
-        return new Response($entity, JsonResponse::HTTP_CREATED);
+        return new WishResponse(new WishDto($entity), JsonResponse::HTTP_CREATED);
     }
 
     public function delete(string $id)
     {
         $this->wishes->delete(new WishId($id));
-        return new JsonResponse();
+        return new EmptyResponse();
     }
 
     /**
      * @param string $id
      * @param Request $request
-     * @return Response
+     * @return WishResponse
      * @throws InvalidFormat
      */
     public function update(string $id, Request $request)
     {
         $entity = (new UpdateRequest($id, $request))->entity();
         $this->wishes->update($entity);
-        return new Response($entity);
+        return new WishResponse(new WishDto($entity));
     }
 
     /**
      * @param string $id
      * @param Request $request
-     * @return Response
+     * @return WishResponse
      * @throws TransitionNotAllowed
      * @throws DomainException
      */
@@ -83,6 +85,17 @@ class WishController extends AbstractController
         $entity = $move->entity();
         $entity->moveTo($move->getState());
         $this->wishes->update($entity);
-        return new Response($entity);
+        return new WishResponse(new WishDto($entity));
+    }
+
+    /**
+     * @param Request $request
+     * @param QueryFactory $queryFactory
+     * @return CollectionResponse
+     */
+    public function index(Request $request, QueryFactory $queryFactory)
+    {
+        $query = (new IndexRequest($request, $queryFactory))->query();
+        return new CollectionResponse($this->wishes->fetch($query));
     }
 }

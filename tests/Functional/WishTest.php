@@ -25,16 +25,14 @@ class WishTest extends WebTestCase
 
     public function testDelete()
     {
-        $wish = $this->randomWish();
-        $response = $this->createWish($wish);
+        $response = $this->createWish($this->randomWish());
         static::client()->request('DELETE', '/wishes/'. $response['id']);
-        $this->assertEquals(Response::HTTP_OK, static::client()->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, static::client()->getResponse()->getStatusCode());
     }
 
     public function testShow()
     {
-        $wish = $this->randomWish();
-        $result = $this->createWish($wish);
+        $result = $this->createWish($this->randomWish());
         static::client()->request('GET', '/wishes/'. $result['id']);
         $this->assertEquals(Response::HTTP_OK, static::client()->getResponse()->getStatusCode());
     }
@@ -42,10 +40,7 @@ class WishTest extends WebTestCase
     public function testUpdate()
     {
         $faker = Faker::create();
-        $wish = [
-            'title' => $faker->text(Title::MAX_LENGTH),
-            'price' => $faker->randomFloat(2),
-        ];
+        $wish = $this->randomWish();
         $response = $this->createWish($wish);
         $wish['title'] = $faker->text(Title::MAX_LENGTH);
         static::client()->request('PUT', '/wishes/'.$response['id'], [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($wish));
@@ -56,14 +51,20 @@ class WishTest extends WebTestCase
 
     public function testMoveState()
     {
-        $wish = $this->randomWish();
-        $wish = $this->createWish($wish);
+        $wish = $this->createWish($this->randomWish());
         static::client()->request('PUT', '/wishes/'.$wish['id'].'/state/'.Obtained::SLUG_OBTAINED);
         $response = json_decode(static::client()->getResponse()->getContent(), true);
         $this->assertEquals(Obtained::SLUG_OBTAINED, $response['state']);
         static::client()->request('PUT', '/wishes/'.$wish['id'].'/state/'.Archived::SLUG_ARCHIVED);
         $response = json_decode(static::client()->getResponse()->getContent(), true);
         $this->assertEquals(Archived::SLUG_ARCHIVED, $response['state']);
+    }
+
+    public function testIndex()
+    {
+        $this->createWish($this->randomWish());
+        static::client()->request('GET', '/wishes');
+        $this->assertEquals(Response::HTTP_OK, static::client()->getResponse()->getStatusCode());
     }
 
     private function createWish(array $wish): array

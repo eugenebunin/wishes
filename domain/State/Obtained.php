@@ -18,7 +18,7 @@ class Obtained extends State
 
     function canUpdate(): bool
     {
-        return false;
+        return true;
     }
 
     public function slug(): string
