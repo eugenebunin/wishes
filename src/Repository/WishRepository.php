@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\DoctrineQuery;
 use App\StateEnum;
 use App\WishId;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +10,6 @@ use Domain\Entity;
 use Domain\EntityFactory;
 use Domain\Exceptions\EntityNotFound;
 use Domain\Id;
-use Domain\Loader;
 use Domain\Query;
 use Domain\Repository as Contract;
 use App\Entity\Wish;
