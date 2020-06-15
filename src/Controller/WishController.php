@@ -9,7 +9,7 @@ use App\Response\EmptyResponse;
 use App\Request\MoveRequest;
 use App\QueryFactory;
 use App\Request\UpdateRequest;
-use App\WishDto;
+use App\Response\WishDto;
 use App\WishId;
 use App\Response\WishResponse;
 use Domain\Exceptions\DomainException;
